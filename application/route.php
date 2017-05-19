@@ -13,9 +13,12 @@ return [
     '__pattern__' => [
         'name' => '\w+',
     ],
-    '[hello]'     => [
-        ':id'   => ['index/hello', ['method' => 'get'], ['id' => '\d+']],
-        ':name' => ['index/hello', ['method' => 'post']],
-    ],
+    '/'             =>  'index',
+    'hello/:name'   =>  'admin/Index/hello',
+    // http://www.speechx_tp.com/index.php/hello/1
+    // 伪静态解决   ->  http://www.speechx_tp.com/hello/1
+    'main'   =>  'admin/Main/index',
+    'news'   =>  'admin/News/getnewsList',
+    'addnews'   =>  'admin/News/addNews',
 
 ];

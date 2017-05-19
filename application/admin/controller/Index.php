@@ -8,11 +8,11 @@ class Index
     {
 		return view('index');
     }
-	
-	public function hello($name){
-		$news = model('News');
-		$a = $news->get123();
-		return 'hello'.$name."".$a;
-	}
+
+//	public function hello($name){
+////		$news = model('News');
+////		$a = $news->get123();
+//		return 'hello'.$name."";
+//	}
 	
 }

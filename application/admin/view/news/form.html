@@ -1,0 +1,27 @@
+{extend name="base/common" /}
+
+{block name="content"}
+<div class="row">
+    <div class="col-md-6" style="position: fixed;z-index: 100">
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h4><i class="icon fa fa-check"></i> Alert!</h4>
+            Success alert preview. This alert is dismissable.
+        </div>
+    </div>
+    <div class="col-xs-12">
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title">Select2</h3>
+
+                <div class="box-tools pull-right">
+                    <button type="submit" class="btn btn-block btn-primary btn-lg">发布</button>
+                    <button type="submit" class="btn btn-block btn-warning btn-lg">草稿</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+{/block}
