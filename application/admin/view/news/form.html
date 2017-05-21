@@ -5,10 +5,16 @@
     <div class="col-xs-12">
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title">Select2</h3>
+                <h3 class="box-title" style="height: 50px">{$uri}</h3>
                 <div class="box-tools pull-right">
-                    <!-- <button type="submit" class="btn btn-block btn-primary btn-lg">发布</button> -->
-                    <!-- <button type="submit" class="btn btn-block btn-warning btn-lg">草稿</button> -->
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-primary">
+                        <i class="fa fa-get-pocket"></i> 发布 
+                      </button>
+                      <button type="button" class="btn btn-warning">
+                        <i class="fa fa-bitbucket"></i> 草稿
+                      </button>
+                    </div>
                 </div>
             </div>
             <div class="box-body">
@@ -60,13 +66,13 @@
                         </div>
                     </div>
                     <div class="col-xs-2" style="margin-left: 30px;">
-                        <div style="background-color: black;height: 300px;width: 400px"></div>
+                        <div style="background-color: black;height: 200px;width: 300px"></div>
                     </div>
                 </div>
                 
                 
                 <div class="row">
-                    <div class="col-xs-12" style="margin-top: 30px">
+                    <div class="col-xs-12">
                         <textarea id="tinymceArea"></textarea>
                     </div>
                 </div>

@@ -13,6 +13,9 @@ class News extends Base{
     }
 
     public function addNews(){
+    	$dispatch = $this->request->dispatch();
+		$activeRouter = $dispatch['module']['0'] . '/' . $dispatch['module'][1] . '/' . $dispatch['module'][2];
+		$this->assign('uri', $activeRouter);
         return view('form');
     }
 
