@@ -19,6 +19,6 @@ return [
     // 伪静态解决   ->  http://www.speechx_tp.com/hello/1
     'main'   =>  'admin/Main/index',
     'news'   =>  'admin/News/getnewsList',
-    'addnews'   =>  'admin/News/addNews',
+    'newsForm'   =>  'admin/News/newsForm',
 
 ];

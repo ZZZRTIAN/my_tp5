@@ -1,7 +1,7 @@
 {extend name="base/common" /}
 
 {block name="content"}
-<div class="row">
+<div class="row ">
     <div class="col-xs-12">
         <div class="box box-default">
             <div class="box-header with-border">
@@ -9,9 +9,9 @@
                 <div class="box-tools pull-right">
                     <div class="btn-group">
                       <button type="button" class="btn btn-primary" id="publish">
-                        <i class="fa fa-get-pocket"></i> 发布 
+                        <i class="fa fa-cloud-upload"></i> 发布
                       </button>
-                      <button type="button" class="btn btn-warning" id="">
+                      <button type="button" class="btn btn-warning" id="draft">
                         <i class="fa fa-bitbucket"></i> 草稿
                       </button>
                     </div>
@@ -22,21 +22,15 @@
                     <div class="col-xs-6">
                         <div class="row">
                             <div class="col-xs-12 form-group has-error">
-                                <label class="control-label pull-right" for="inputError"><i class="fa fa-times-circle-o"></i> Input with
-                                error</label>
                                 <label class="control-label" for="inputSuccess"><label>标题:</label></label>
-                                <input class="form-control input-lg" type="text" placeholder="Title">
+                                <input name="title" class="form-control input-lg" type="text" placeholder="Title">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xs-6">
                                 <label>作者:</label>
-                                <select class="form-control">
-                                    <option>option 1</option>
-                                    <option>option 2</option>
-                                    <option>option 3</option>
-                                    <option>option 4</option>
-                                    <option>option 5</option>
+                                <select class="form-control" name="author">
+                                    <option value="option1">option 1</option>
                                 </select>
                             </div>
                             <div class="col-xs-6">
@@ -48,18 +42,14 @@
                                         </div>
                                         <input type="text" class="form-control pull-right" id="datepicker" data-am-datepicker="{format: 'yy-mm-dd'}">
                                     </div>
-                            <!-- /.input group -->
                                 </div>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-xs-12">
-                                <div class="form-group has-success">
+                                <div class="form-group has-success" id="news_ab">
                                     <label>摘要：</label>
-                                    <label class="control-label pull-right" for="inputSuccess">
-                                        <i class="fa fa-check"></i> Input with success
-                                    </label>
                                     <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
                                 </div>
                             </div>
@@ -77,13 +67,6 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <textarea id="tinymceArea"></textarea>
-                        <div class="editor-custom-btn-container" style="position: absolute;right: 20px;top: 3px;">
-                          <div class="upload-container" style="display: inline-block;">
-                            <button type="button" class="btn btn-success" id="uploadImg">
-                              上传图片
-                            </button>
-                          </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -91,74 +74,72 @@
     </div>
 </div>
 
-    <div class="modal fade" id="avatar-modal" aria-hidden="true" aria-labelledby="avatar-modal-label" role="dialog" tabindex="-1">
-      <div class="modal-dialog modal-lg">
+<div class="modal fade" id="avatar-modal" aria-hidden="true" aria-labelledby="avatar-modal-label" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
-          <!--<form class="avatar-form" action="upload-logo.php" enctype="multipart/form-data" method="post">-->
-          <form class="avatar-form">
-            <div class="modal-header">
-              <button class="close" data-dismiss="modal" type="button">&times;</button>
-              <h4 class="modal-title" id="avatar-modal-label">上传图片</h4>
-            </div>
-            <div class="modal-body">
-              <div class="avatar-body">
-                <div class="avatar-upload">
-                  <input class="avatar-src" name="avatar_src" type="hidden">
-                  <input class="avatar-data" name="avatar_data" type="hidden">
-                  <label for="avatarInput" style="line-height: 35px;">图片上传</label>
-                  <button class="btn btn-danger"  type="button" style="height: 35px;" onclick="$('input[id=avatarInput]').click();">请选择图片</button>
-                  <span id="avatar-name"></span>
-                  <input class="avatar-input hide" id="avatarInput" name="avatar_file" type="file"></div>
-                <div class="
-                row">
-                  <div class="col-md-6 col-md-offset-3">
-                      <div class="avatar-preview preview-lg" style="height: 200px;width: 300px;" id="imageHead"></div>
-                      <!--<div class="avatar-preview preview-md"></div>
-                  <div class="avatar-preview preview-sm"></div>-->
-                    </div>
-                  <div class="col-md-9">
-                    <div class="avatar-wrapper"></div>
-                  </div>
-                  
+            <!--<form class="avatar-form" action="upload-logo.php" enctype="multipart/form-data" method="post">-->
+            <form class="avatar-form">
+                <div class="modal-header">
+                    <button class="close" data-dismiss="modal" type="button">&times;</button>
+                    <h4 class="modal-title" id="avatar-modal-label">上传图片</h4>
                 </div>
-                <div class="row avatar-btns">
-                  <div class="col-md-4">
-                    <div class="btn-group">
-                      <button class="btn btn-danger fa fa-undo" data-method="rotate" data-option="-90" type="button" title="Rotate -90 degrees"> 向左旋转</button>
-                    </div>
-                    <div class="btn-group">
-                      <button class="btn  btn-danger fa fa-repeat" data-method="rotate" data-option="90" type="button" title="Rotate 90 degrees"> 向右旋转</button>
-                    </div>
-                  </div>
-                  <div class="col-md-5" style="text-align: right;">               
-                    <button class="btn btn-danger fa fa-arrows" data-method="setDragMode" data-option="move" type="button" title="移动">
+                <div class="modal-body">
+                    <div class="avatar-body">
+                        <div class="avatar-upload">
+                            <input class="avatar-src" name="avatar_src" type="hidden">
+                            <input class="avatar-data" name="avatar_data" type="hidden">
+                            <label for="avatarInput" style="line-height: 35px;">图片上传</label>
+                            <button class="btn btn-danger"  type="button" style="height: 35px;" onclick="$('input[id=avatarInput]').click();">请选择图片</button>
+                            <span id="avatar-name"></span>
+                            <input class="avatar-input hide" id="avatarInput" name="avatar_file" type="file"></div>
+                        <div class="
+                row">
+                            <div class="col-md-6 col-md-offset-3">
+                                <div class="avatar-preview preview-lg" style="height: 200px;width: 300px;" id="imageHead"></div>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="avatar-wrapper"></div>
+                            </div>
+
+                        </div>
+                        <div class="row avatar-btns">
+                            <div class="col-md-4">
+                                <div class="btn-group">
+                                    <button class="btn btn-danger fa fa-undo" data-method="rotate" data-option="-90" type="button" title="Rotate -90 degrees"> 向左旋转</button>
+                                </div>
+                                <div class="btn-group">
+                                    <button class="btn  btn-danger fa fa-repeat" data-method="rotate" data-option="90" type="button" title="Rotate 90 degrees"> 向右旋转</button>
+                                </div>
+                            </div>
+                            <div class="col-md-5" style="text-align: right;">
+                                <button class="btn btn-danger fa fa-arrows" data-method="setDragMode" data-option="move" type="button" title="移动">
                           <span class="docs-tooltip" data-toggle="tooltip" title="" data-original-title="$().cropper(&quot;setDragMode&quot;, &quot;move&quot;)">
                           </span>
-                        </button>
-                        <button type="button" class="btn btn-danger fa fa-search-plus" data-method="zoom" data-option="0.1" title="放大图片">
+                                </button>
+                                <button type="button" class="btn btn-danger fa fa-search-plus" data-method="zoom" data-option="0.1" title="放大图片">
                           <span class="docs-tooltip" data-toggle="tooltip" title="" data-original-title="$().cropper(&quot;zoom&quot;, 0.1)">
                             <!--<span class="fa fa-search-plus"></span>-->
                           </span>
-                        </button>
-                        <button type="button" class="btn btn-danger fa fa-search-minus" data-method="zoom" data-option="-0.1" title="缩小图片">
+                                </button>
+                                <button type="button" class="btn btn-danger fa fa-search-minus" data-method="zoom" data-option="-0.1" title="缩小图片">
                           <span class="docs-tooltip" data-toggle="tooltip" title="" data-original-title="$().cropper(&quot;zoom&quot;, -0.1)">
                             <!--<span class="fa fa-search-minus"></span>-->
                           </span>
-                        </button>
-                        <button type="button" class="btn btn-danger fa fa-refresh" data-method="reset" title="重置图片">
+                                </button>
+                                <button type="button" class="btn btn-danger fa fa-refresh" data-method="reset" title="重置图片">
                             <span class="docs-tooltip" data-toggle="tooltip" title="" data-original-title="$().cropper(&quot;reset&quot;)" aria-describedby="tooltip866214">
-                       </button>
-                      </div>
-                  <div class="col-md-3">
-                    <button class="btn btn-danger btn-block avatar-save fa fa-save" type="button" data-dismiss="modal"> 保存修改</button>
-                  </div>
+                                </button>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-danger btn-block avatar-save fa fa-save" type="button" data-dismiss="modal"> 保存修改</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-            </div>
-          </form>
+            </form>
         </div>
-      </div>
     </div>
+</div>
 
 
 
@@ -169,56 +150,68 @@
 <script src="/assets/js/html2canvas.min.js" type="text/javascript" charset="utf-8"></script>
 
 <script>
+
+    var ImagedataUrl;
+    var ERROR_TIPS = "<label class='control-label pull-right' for='inputError'> \
+                <i class='fa fa-times-circle-o'></i> Input with error \
+            </label>";
+    var SUCCESS_TIPS = "<label class='control-label pull-right' for='inputSuccess'> \
+                <i class='fa fa-check'></i> Input with success \
+            </label>";
+
     $(".avatar-save").on("click", function() {
         var img_lg = document.getElementById('imageHead');
         // 截图小的显示框内的内容
         html2canvas(img_lg, {
-          allowTaint: true,
-          taintTest: false,
-          onrendered: function(canvas) {
-            canvas.id = "mycanvas";
-            //生成base64图片数据
-            var dataUrl = canvas.toDataURL("image/jpeg");
-            var newImg = document.createElement("img");
-            newImg.src = dataUrl;
-            $('#_pic img').attr('src',dataUrl );
-          }
+            allowTaint: true,
+            taintTest: false,
+            onrendered: function(canvas) {
+                canvas.id = "mycanvas";
+                //生成base64图片数据
+                var dataUrl = canvas.toDataURL("image/jpeg");
+                var newImg = document.createElement("img");
+                newImg.src = dataUrl;
+                $('#_pic img').attr('src',dataUrl );
+            }
         });
     })
 
     $('#datepicker').datepicker({
+        minDate: new Date(),
         autoclose:true, // 选完后自动关闭
         format: 'yyyy-mm-dd'
     });
 
     /* tinymce快捷工具 */
-    var toolbar = 'removeformat undo redo |  bullist numlist | outdent indent | forecolor | fullscreen code | bold italic blockquote | h2 p  media link | alignleft aligncenter alignright';
-    var plugins = 'advlist,autolink,code,paste,textcolor, colorpicker,fullscreen,link,lists,media,wordcount,imagetools,watermark';
+
+    var plugins = 'advlist,autolink,code,paste,textcolor, colorpicker,fullscreen,link,lists,media,wordcount,imagetools,watermark,uploadimage';
 
     tinymce.init({
-      selector: '#tinymceArea',
-      language: 'zh_CN',
-      object_resizing: false, // 关闭调整图像，表格，media对象的大小
-      height: 400,
-      toolbar:this.toolbar,
-      menubar:'',// 菜单栏
-      plugins: this.plugins,
-      //This option allows you to to split the current container block element if the enter key is pressed inside an empty inner block element.
-      // end_container_on_empty_block: true,
-      // powerpaste_word_import: 'clean',
-      // code_dialog_height: 450,
-      // code_dialog_width: 1000,
-      // advlist_bullet_styles: 'square',
-      // advlist_number_styles: 'default',
-      // block_formats: '普通标签=p;小标题=h2;',
-      // imagetools_cors_hosts: ['speechx_tp.com', 'wallstreetcn.com'],
-      // imagetools_toolbar: 'watermark',
-      // // 设置 a 标签 _blank 原页面打开
-      // default_link_target: '_blank',
-      // link_title: false,
-      // textcolor_map: [
-      //       '1482f0', '1482f0',
-      //       '4595e6', '4595e6'],
-    })
+        selector: '#tinymceArea',
+        language: 'zh_CN',
+        theme_advanced_fonts : "宋体=宋体;微软雅黑=微软雅黑;新宋体=新宋体;Courier New=courier new,courier,monospace;AkrutiKndPadmini=Akpdmi-n",
+        upload_image_url: 'admin/News/uploadImg', //配置的上传图片的路由 接收保存，返回图片路径
+        object_resizing: false, // 关闭调整图像，表格，media对象的大小
+        height: 400,
+        toolbar1: "undo redo | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | fontsizeselect ",
+        toolbar2: "forecolor backcolor | bullist numlist | outdent indent | removeformat | link unlink uploadimage  | code preview fullscreen ",
+        menubar:'',// 菜单栏
+        plugins: this.plugins
+    });
+
+    //发布
+    $('#publish').on("click", function() {
+        alert(this.ImagedataUrl);
+
+
+        //获取tinymce文本内容   设置内容setContent
+        var content = tinymce.get('tinymceArea').getContent({ format: 'raw' });
+
+    });
+
+    //草稿
+    $('#draft').on("click", function() {
+
+    });
 </script>
 {/block}
