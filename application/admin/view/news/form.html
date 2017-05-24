@@ -58,7 +58,7 @@
                     
                     <div class="col-xs-4">
                         <div id="_pic"  data-toggle="modal" data-target="#avatar-modal" style="border:1px dashed #d9d9d9;margin: 50px 50px;height: 200px;width: 300px">
-                          <img src="">
+                          <img src="/uploads/test.jpg">
                         </div>
                     </div>
                 </div>
@@ -151,7 +151,6 @@
 
 <script>
 
-    var ImagedataUrl;
     var ERROR_TIPS = "<label class='control-label pull-right' for='inputError'> \
                 <i class='fa fa-times-circle-o'></i> Input with error \
             </label>";
@@ -201,10 +200,11 @@
 
     //发布
     $('#publish').on("click", function() {
-        alert(this.ImagedataUrl);
 
+        // 图片src data
+        var imgData = $('#_pic img').attr("src");
 
-        //获取tinymce文本内容   设置内容setContent
+        // 获取tinymce文本内容   设置内容setContent
         var content = tinymce.get('tinymceArea').getContent({ format: 'raw' });
 
     });
