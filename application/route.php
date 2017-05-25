@@ -14,14 +14,13 @@ return [
         'name' => '\w+',
     ],
     '/'             =>  'index',
-    'hello/:name'   =>  'admin/Index/hello',
     // http://www.speechx_tp.com/index.php/hello/1
     // 伪静态解决   ->  http://www.speechx_tp.com/hello/1
-    'main'          =>  'admin/Main/index',
     'news'          =>  'admin/News/getnewsList',
-    'newsForm'      =>  'admin/News/newsForm',
+    'newsForm/[:newsId]'      =>  'admin/News/newsForm', // [ 可选 ]
     'addNews'       =>  'admin/News/addNews',
+    'editNews/:id'   =>  'admin/News/editNews',
+    'uploadImg'     =>  'admin/News/uploadImg',
 
-    'getNewsInfo'       =>  'index/Index/getNewsInfo'
 
 ];

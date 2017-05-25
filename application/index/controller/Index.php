@@ -10,7 +10,7 @@ class Index
     }
 
     public function getNewsInfo(){
-        
+        return '12';
     }
 	
 }

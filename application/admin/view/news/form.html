@@ -1,13 +1,13 @@
 {extend name="base/common" /}
 
 {block name="content"}
-<div class="row ">
+<div class="row">
     <div class="col-xs-12">
         <div class="box box-default">
             <!-- 加载中 -->
-            <!--<div class="overlay">
+            <div class="overlay">
                 <i class="fa fa-refresh fa-spin"></i>
-            </div>-->
+            </div>
             <div class="box-header with-border">
                 <h3 class="box-title" style="height: 30px">Select2</h3>
                 <div class="box-tools pull-right">
@@ -63,8 +63,8 @@
                     </div>
                     
                     <div class="col-xs-4">
-                        <div id="_pic"  data-toggle="modal" data-target="#avatar-modal" style="border:1px dashed #d9d9d9;margin: 50px 50px;height: 200px;width: 300px">
-                          <img src="/uploads/test.jpg">
+                        <div id="_pic"  data-toggle="modal" data-target="#avatar-modal" style="border:1px dashed #d9d9d9;border-radius:5px;margin: 50px 50px;height: 205px;width: 305px">
+                          <img src="" style="padding: 3px;">
                         </div>
                     </div>
                 </div>
@@ -186,9 +186,24 @@ var SUCCESS_TIPS = "<label class='control-label pull-right' for='inputSuccess'> 
                         <i class='fa fa-check'></i> Input with success \
                     </label>";
 
-// 加载数据
+// 加载数据 如果有传来 id
 $(document).ready(function () {
-    getInfo();
+    var newsId = "{$newsId}";
+    if (newsId != ""){
+        $.get("/editNews/" + newsId, function (data, status) {
+            if (status == 'success') {
+                $('#title').val(data.title);
+                $('#datepicker').val(data.date);
+                $('#news_ab textarea').val(data.abstract);
+                setTimeout(function () {
+                    tinymce.get('tinymceArea').setContent(data.content);
+                    $('.overlay').hide();
+                },200);
+            }
+        });
+    }else{
+        $('.overlay').hide();
+    }
 });
 
 $(".avatar-save").on("click", function() {
@@ -215,13 +230,12 @@ $('#datepicker').datepicker({
 });
 
 /* tinymce快捷工具 */
-
 var plugins = 'advlist,autolink,code,paste,textcolor, colorpicker,fullscreen,link,lists,media,wordcount,imagetools,uploadimage';
 
 tinymce.init({
     selector: '#tinymceArea',
     language: 'zh_CN',
-    upload_image_url: 'admin/News/uploadImg', //配置的上传图片的路由 接收保存，返回图片路径
+    upload_image_url: '/uploadImg', //配置的上传图片的路由 接收保存，返回图片路径
     object_resizing: false, // 关闭调整图像，表格，media对象的大小
     height: 400,
     toolbar1: "undo redo | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | fontsizeselect ",
@@ -243,6 +257,7 @@ function toAjax(f) {
             dataType: 'json',
             success: function(re) {
                 $('#modal-default').modal('show');
+                console.log(re.status);
             }
         });
     }
@@ -301,11 +316,6 @@ function validate(){
     return '';
 }
 
-function getInfo() {
-    $.get("/getNewsInfo", function (data, status) {
-
-    });
-}
 
 </script>
 {/block}
