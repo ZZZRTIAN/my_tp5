@@ -161,9 +161,7 @@
                 <p>发布成功</p>
             </div>
             <div class="modal-footer">
-                <a href="/news" class="btn btn-dropbox">
-                    确定
-                </a>
+                <a href="/news" class="btn btn-dropbox">确定</a>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -235,7 +233,7 @@ var plugins = 'advlist,autolink,code,paste,textcolor, colorpicker,fullscreen,lin
 tinymce.init({
     selector: '#tinymceArea',
     language: 'zh_CN',
-    upload_image_url: '/uploadImg', //配置的上传图片的路由 接收保存，返回图片路径
+    upload_image_url: '/admin/News/uploadImg', //配置的上传图片的路由 接收保存，返回图片路径
     object_resizing: false, // 关闭调整图像，表格，media对象的大小
     height: 400,
     toolbar1: "undo redo | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | fontsizeselect ",
@@ -251,7 +249,7 @@ function toAjax(f) {
         alert('请填写完整信息');
     }else {
         $.ajax({
-            url: "/addNews",
+            url: "/admin/News/addNews",
             data: data,
             type: "POST",
             dataType: 'json',

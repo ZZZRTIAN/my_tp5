@@ -8,7 +8,7 @@ namespace app\admin\controller;
 
 class News extends Base{
 
-    public function getnewsList(){
+    public function newsList(){
         return view('list');
     }
 
@@ -38,6 +38,13 @@ class News extends Base{
 //        $image = base64_to_jpeg( $img, 'tmp.jpg' );
          // ajax请求才有
         return $this->error('错误。。不是ajax请求','news');
+    }
+    
+    /**
+     * 发布状态改变
+     */
+    public function changeState(){
+    	
     }
 
     /**
