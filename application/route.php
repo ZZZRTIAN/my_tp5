@@ -17,8 +17,11 @@ return [
     'hello/:name'   =>  'admin/Index/hello',
     // http://www.speechx_tp.com/index.php/hello/1
     // 伪静态解决   ->  http://www.speechx_tp.com/hello/1
-    'main'   =>  'admin/Main/index',
-    'news'   =>  'admin/News/getnewsList',
-    'newsForm'   =>  'admin/News/newsForm',
+    'main'          =>  'admin/Main/index',
+    'news'          =>  'admin/News/getnewsList',
+    'newsForm'      =>  'admin/News/newsForm',
+    'addNews'       =>  'admin/News/addNews',
+
+    'getNewsInfo'       =>  'index/Index/getNewsInfo'
 
 ];

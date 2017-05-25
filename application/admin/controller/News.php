@@ -23,10 +23,11 @@ class News extends Base{
      * 添加新闻到数据库
      */
     public function addNews(){
-        $img_file = file_get_contents($_POST['img']);
-        $img = base64_encode($img_file);
-
-        $image = base64_to_jpeg( $img, 'tmp.jpg' );
+//        $img_file = file_get_contents($_POST['img']);
+//        $img = base64_encode($img_file);
+//
+//        $image = base64_to_jpeg( $img, 'tmp.jpg' );
+        return json_encode( array('statu'=>1) );
     }
 
     /**
