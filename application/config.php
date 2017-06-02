@@ -17,7 +17,7 @@ return [
     // 应用命名空间
     'app_namespace'          => 'app',
     // 应用调试模式
-    'app_debug'              => false,
+    'app_debug'              => true,
     // 应用Trace
     'app_trace'              => false,
     // 应用模式状态
@@ -28,6 +28,8 @@ return [
     'auto_bind_module'       => false,
     // 注册的根命名空间
     'root_namespace'         => [],
+    // 扩展配置文件
+    'extra_config_list'      => ['database', 'route', 'validate'],
     // 扩展函数文件
     'extra_file_list'        => [THINK_PATH . 'helper' . EXT],
     // 默认输出类型
@@ -140,9 +142,11 @@ return [
 
     // 视图输出字符串内容替换
     'view_replace_str'       => [],
-    // 默认跳转页面对应的模板文件
-    'dispatch_success_tmpl'  => THINK_PATH . 'tpl' . DS . 'dispatch_jump.tpl',
-    'dispatch_error_tmpl'    => THINK_PATH . 'tpl' . DS . 'dispatch_jump.tpl',
+    //默认成功跳转对应的模板文件
+    'dispatch_success_tmpl' => 'public/success',
+    //默认错误跳转对应的模板文件
+    'dispatch_error_tmpl' => 'public/error',
+
 
     // +----------------------------------------------------------------------
     // | 异常及错误设置
@@ -236,4 +240,12 @@ return [
         'var_page'  => 'page',
         'list_rows' => 15,
     ],
+
+    // 微信配置
+    'token'=>'',
+    'encodingaeskey'=>'',
+    'appid'=>'',
+    'appsecret'=>'',
+
+    'SX_AUTH_KEY'=>'S~^nlxj3i?e-%pwSHr"gLyA|EQ+Is@5!1.2RbM<W',
 ];

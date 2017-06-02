@@ -12,10 +12,10 @@
                 <h3 class="box-title" style="height: 30px">Select2</h3>
                 <div class="box-tools pull-right">
                     <div class="btn-group">
-                      <button type="button" class="btn btn-primary" onclick="toAjax('publish');">
+                      <button type="button" class="btn btn-primary" onclick="toAjax(1);">
                         <i class="fa fa-cloud-upload"></i> 发布
                       </button>
-                      <button type="button" class="btn btn-warning" onclick="toAjax('draft');">
+                      <button type="button" class="btn btn-warning" onclick="toAjax(0);">
                         <i class="fa fa-bitbucket"></i> 草稿
                       </button>
                     </div>
@@ -161,7 +161,7 @@
                 <p>发布成功</p>
             </div>
             <div class="modal-footer">
-                <a href="/news" class="btn btn-dropbox">确定</a>
+                <a href="newsList" class="btn btn-dropbox">确定</a>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -188,7 +188,7 @@ var SUCCESS_TIPS = "<label class='control-label pull-right' for='inputSuccess'> 
 $(document).ready(function () {
     var newsId = "{$newsId}";
     if (newsId != ""){
-        $.get("/editNews/" + newsId, function (data, status) {
+        $.get("/admin/News/editNews/" + newsId, function (data, status) {
             if (status == 'success') {
                 $('#title').val(data.title);
                 $('#datepicker').val(data.date);
@@ -244,6 +244,7 @@ tinymce.init({
 
 function toAjax(f) {
     var data = validate();
+    data.state = f;
     //验证失败
     if (!data) {
         alert('请填写完整信息');
@@ -254,8 +255,11 @@ function toAjax(f) {
             type: "POST",
             dataType: 'json',
             success: function(re) {
-                $('#modal-default').modal('show');
-                console.log(re.status);
+                if (re.result == 1){
+                    $('#modal-default').modal('show');
+                }else{
+                    alert('有错误');
+                }
             }
         });
     }
@@ -284,8 +288,8 @@ function validate(){
         $('.author').addClass('has-success').siblings().removeClass("has-success");
     }
     // 发布时间
-    var date = $('#datepicker').val();
-    if (!date) {
+    var publish_time = $('#datepicker').val();
+    if (!publish_time) {
         $('.datebox').addClass("has-error").siblings().removeClass("has-error");
         $('.datebox').prepend(ERROR_TIPS);
         ispassed = false;
@@ -294,8 +298,8 @@ function validate(){
         $('.datebox').addClass('has-success').siblings().removeClass("has-success");
     }
     // 摘要
-    var newsAb = $('#news_ab textarea').val();
-    if (!newsAb) {
+    var abstract = $('#news_ab textarea').val();
+    if (!abstract) {
         $('#news_ab').addClass("has-error").siblings().removeClass("has-error");
         $('#news_ab').prepend(ERROR_TIPS);
         ispassed = false;
@@ -304,12 +308,12 @@ function validate(){
         $('#news_ab').addClass('has-success').siblings().removeClass("has-success");
     }
     // 图片src data
-    var imgData = $('#_pic img').attr("src");
+    var b_img = $('#_pic img').attr("src");
     // 获取tinymce文本内容   设置内容setContent
     var content = tinymce.get('tinymceArea').getContent({ format: 'raw' });
 
     if(ispassed){
-        return {title,author,date,newsAb,imgData,content}
+        return {title,author,publish_time,abstract,b_img,content}
     }
     return '';
 }

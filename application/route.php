@@ -16,11 +16,9 @@ return [
     '/'             =>  'index',
     // http://www.speechx_tp.com/index.php/hello/1
     // 伪静态解决   ->  http://www.speechx_tp.com/hello/1
-//  'newsList'          =>  'admin/News/newsList',
-//  'newsForm/[:newsId]'      =>  'admin/News/newsForm', // [ 可选 ]
-//  'addNews'       =>  'admin/News/addNews',
-//  'editNews/:id'   =>  'admin/News/editNews',
-//  'uploadImg'     =>  'admin/News/uploadImg',
-//	'changeState'	=>	'admin/News/c'
+    'admin/news/newsForm/[:newsId]'      =>  'admin/news/newsForm', // [ 可选 ]
+    'admin/news/editNews/:id'            =>  'admin/news/editNews',
 
+    'news/[:page]'          => 'index/index/getNews',        // 查询
+    'addViews/:id'  => 'index/index/addViews'    // 添加浏览量
 ];
