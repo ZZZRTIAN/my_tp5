@@ -44,15 +44,15 @@
                         <td>{$news.views}</td>
                         <td style="text-align: left;">{$news.abstract}</td>
                         <td>
-                            <a class="btn btn-app">
+                            <a class="btn btn-app nmodify" href="newsForm/{$news.id}">
                                 <i class="fa fa-edit"></i> 修改
                             </a>
                             {if condition="$news.state eq 1"}
-                            <a class="btn btn-app" data-toggle="modal" data-target="#mymodal" data-nid="1" data-whatever="0">
+                            <a class="btn btn-app" data-toggle="modal" data-target="#mymodal" data-nid="{$news.id}" data-whatever="0">
                                 <i class="fa fa-sticky-note-o"></i> 草稿
                             </a>
                             {else /}
-                            <a class="btn btn-app" data-toggle="modal" data-target="#mymodal" data-nid="2" data-whatever="1">
+                            <a class="btn btn-app" data-toggle="modal" data-target="#mymodal" data-nid="{$news.id}" data-whatever="1">
                                 <i class="fa fa-check-circle"></i> 发布
                             </a>
                             {/if}
@@ -73,8 +73,6 @@
         </div>
     </div>
 </div>
-
-
 
 <!-- alert弹出窗口 -->
 <div class="modal fade" id="mymodal" style="display: none;">
@@ -101,6 +99,7 @@
 
 <script>
 	var modal = $("#mymodal");
+	
 	modal.on("show.bs.modal", function(e) {    
 	    var draft = "确定要取消发布，转为草稿吗？";
 		var publish = "确定要发布新闻吗？";
@@ -117,17 +116,21 @@
 		}
 		modal.find('.modal-footer .btn-primary').attr("onclick","changeState("+ newsId +","+ recipient +")");		
 	 })
-	function changeState(nid, type){
+	function changeState(nid, state){
 		$.ajax({
-			url: "admin/News/changeState",
-            data: data,
+			url: "/admin/News/changeState",
+            data: {nid:nid,state:state},
             type: "POST",
             dataType: 'json',
-            success: function(re) {
-                $('#modal-default').modal('show');
-                console.log(re.status);
+            success: function(data) {
+            	if(data.result != 0){
+            		window.location.href = window.location.href;
+                	$('#modal-default').modal('close');
+            	}
             }
 		});
 	}
+	
+	
 </script>
 {/block}

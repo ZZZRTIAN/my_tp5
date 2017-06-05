@@ -149,7 +149,7 @@
 </div>
 
 <!-- 提示modal -->
-<div class="modal fade" id="modal-default" style="display: none;">
+<div class="modal" id="modal-default" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -190,8 +190,10 @@ $(document).ready(function () {
     if (newsId != ""){
         $.get("/admin/News/editNews/" + newsId, function (data, status) {
             if (status == 'success') {
+        		$('.box-tools > div.btn-group').empty();
                 $('#title').val(data.title);
                 $('#datepicker').val(data.date);
+                $('#_pic img').attr('src',"/"+data.b_img );
                 $('#news_ab textarea').val(data.abstract);
                 setTimeout(function () {
                     tinymce.get('tinymceArea').setContent(data.content);
@@ -233,7 +235,7 @@ var plugins = 'advlist,autolink,code,paste,textcolor, colorpicker,fullscreen,lin
 tinymce.init({
     selector: '#tinymceArea',
     language: 'zh_CN',
-    upload_image_url: '/admin/News/uploadImg', //配置的上传图片的路由 接收保存，返回图片路径
+    upload_image_url: '/admin/News/uploadImg',
     object_resizing: false, // 关闭调整图像，表格，media对象的大小
     height: 400,
     toolbar1: "undo redo | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | fontsizeselect ",
@@ -317,7 +319,5 @@ function validate(){
     }
     return '';
 }
-
-
 </script>
 {/block}

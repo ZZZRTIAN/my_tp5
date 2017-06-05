@@ -10,12 +10,6 @@ use think\Db;
 
 class News extends Base{
 
-    //如果需要过滤非数据表字段的数据，可以使用：
-    //
-    //$user = new User($_POST);
-    //// 过滤post数组中的非数据表字段数据
-    //$user->allowField(true)->save();
-
     public function newsList(){
         $count = Db::name('news')->count();
         $data = Db::name('news')
@@ -47,7 +41,7 @@ class News extends Base{
             try{
                 $data = input('post.');
                 $newsModel = new NewsModel();
-                $data['b_img'] = $this->uploadBigImg($data['b_img']);
+                $data['b_img'] = $this->uploadBigImg($data['b_img']);   // 将二进制图片文件保存
                 $newsModel->toAddNews($data);
                 // 提交事务
                 Db::commit();
@@ -66,15 +60,24 @@ class News extends Base{
     /**
      * 发布状态改变
      */
-    public function changeState($id,$state){
-        Db::name('news')
-            ->where('id', $id)
-            ->update([
-                'state'  => $state
-            ]);
+    public function changeState(){
+    	if(request()->isPost() && input('post.')){
+            $res = Db::name('news')
+	            	->where('id', input('post.nid'))
+	            	->update([
+	                	'state'  => input('post.state')
+	            	]);
+	        if($res > 0){
+	        	return ['result'=>1];
+	        }else{
+	        	return ['result'=>0];
+	        }
+        }else{
+            return view('list');
+        }
     }
 
-    /**
+	/**
      * 上传文本中的图片     （内容图片）
      */
     public function uploadImg(){
@@ -88,7 +91,6 @@ class News extends Base{
         }
         return '';
     }
-
     /**
      * 新闻列表点击修改时
      * @param $id       新闻id
@@ -102,12 +104,10 @@ class News extends Base{
 //            }
 //            $data = ['username'=>input('post.username')];
 //        }
-        $title = 'this is title!!'.$id;
-        $date = '2017-05-20';
-        $abstract = 'xczcasd asfdcsdf xcv xcv xcw sdf sxcv xcv er r';
-        $content = "<p>asdasdasd<img style='width: 300px;' src='/uploads/20170525/bf5a7897f3b2ec3250994172acda40c4.jpg' /></p>";
-        return ['title'=>$title,'date'=>$date,'abstract'=>$abstract,'content'=>$content];
-    }
+		$data = Db::name('news')->where('id',$id)->find();
+//  	dump($data);
+        return ['title'=>$data['title'],'date'=>$data['publish_time'],'b_img'=>$data['b_img'],'abstract'=>$data['abstract'],'content'=>$data['content'],'state'=>$data['state']];
+   }
 
     /**
      * 上传标题下显示的图片 （大图）
@@ -118,7 +118,7 @@ class News extends Base{
         $img_file = file_get_contents($imgdata);
         $img = base64_encode($img_file);
 
-        return $this->base64_to_jpeg( $img, ROOT_PATH . 'public' . DS . 'uploads' . DS . md5(uniqid(rand())).'.jpg' );
+        return $this->base64_to_jpeg( $img, 'uploads' . DS . md5(uniqid(rand())).'.jpg' );
     }
 
     /**
@@ -133,6 +133,4 @@ class News extends Base{
         fclose( $ifp );
         return( $output_file );
     }
-    
-
 }

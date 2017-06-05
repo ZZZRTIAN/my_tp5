@@ -5,7 +5,7 @@ use think\Model;
 class News extends Model
 {
     // 设置当前模型对应的完整数据表名称
-    protected $table = 'speechx_news';
+//    protected $table = 'speechx_news';
     // 数据自动完成指在不需要手动赋值的情况下对字段的值进行处理后写入数据库。
     protected $auto = ['update_time'];
     protected $insert = ['create_time','views'=>0];
