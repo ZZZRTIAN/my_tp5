@@ -56,35 +56,72 @@ class News extends Base{
             return view('form');
         }
     }
-    
+
+    public function modifynews(){
+        if(request()->isPost() && input('post.')){
+            $data = input('post.');
+            $data['b_img'] = $this->checkData($data['b_img'])?$this->uploadBigImg($data['b_img']):$data['b_img'];   // 将二进制图片文件保存
+            $res = Db::name('news')
+                ->where('id', input('post.id'))
+                ->update($data);
+            if ($res > 0 ){
+                return ['result'=>1];
+            }else{
+                return ['result'=>0];
+            }
+        }else{
+            return view('form');
+        }
+    }
+
     /**
      * 发布状态改变
      */
     public function changeState(){
-    	if(request()->isPost() && input('post.')){
+        if(request()->isPost() && input('post.')){
             $res = Db::name('news')
-	            	->where('id', input('post.nid'))
-	            	->update([
-	                	'state'  => input('post.state')
-	            	]);
-	        if($res > 0){
-	        	return ['result'=>1];
-	        }else{
-	        	return ['result'=>0];
-	        }
+                ->where('id', input('post.nid'))
+                ->update([
+                    'state'  => input('post.state')
+                ]);
+            if($res > 0){
+                return ['result'=>1];
+            }else{
+                return ['result'=>0];
+            }
         }else{
             return view('list');
         }
     }
 
-	/**
+    /**
+     * 删除新闻
+     * @return array|\think\response\View
+     * @throws \think\Exception
+     */
+    public function delNews(){
+        if(request()->isPost() && input('post.')){
+            $res = Db::name('news')
+                ->where('id', input('post.nid'))
+                ->delete();
+            if($res > 0){
+                return ['result'=>1];
+            }else{
+                return ['result'=>0];
+            }
+        }else{
+            return view('list');
+        }
+    }
+
+    /**
      * 上传文本中的图片     （内容图片）
      */
     public function uploadImg(){
         // 获取表单上传文件 例如上传了001.jpg
         $file = request()->file('textImage');
         // 移动到框架应用根目录/public/uploads/ 目录下
-        $info = $file->validate(['ext'=>'jpg,png,gif'])->rule('uniqid')->move(ROOT_PATH . 'public' . DS . 'uploads');
+        $info = $file[0]->validate(['ext'=>'jpg,png,gif'])->rule('uniqid')->move(ROOT_PATH . 'public' . DS . 'uploads');
         if($info){
             $imgPath = str_replace('\\', '/', $info->getSaveName());  //  \ -> /
             return '/uploads' . DS . $imgPath;
@@ -104,10 +141,10 @@ class News extends Base{
 //            }
 //            $data = ['username'=>input('post.username')];
 //        }
-		$data = Db::name('news')->where('id',$id)->find();
+        $data = Db::name('news')->where('id',$id)->find();
 //  	dump($data);
         return ['title'=>$data['title'],'date'=>$data['publish_time'],'b_img'=>$data['b_img'],'abstract'=>$data['abstract'],'content'=>$data['content'],'state'=>$data['state']];
-   }
+    }
 
     /**
      * 上传标题下显示的图片 （大图）
@@ -132,5 +169,13 @@ class News extends Base{
         fwrite( $ifp, base64_decode( $base64_string) );
         fclose( $ifp );
         return( $output_file );
+    }
+
+    private function checkData($data){
+        if(strpos($data,'data:image/') !== false) {
+            return true;
+        }else{
+            return false;
+        }
     }
 }

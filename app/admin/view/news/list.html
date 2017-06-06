@@ -19,18 +19,27 @@
             </div>
             <div class="box-body table-responsive no-padding">
                 <table class="table table-hover text-center">
-                    <tbody class="text-center">
+                    <tbody>
                     <tr>
                         <th>ID</th>
                         <th style="width: 100px">作者</th>
                         <th style="width: 100px">发布时间</th>
                         <th style="width: 100px">状态</th>
-                        <th style="width: 100px">浏览量</th>
+                        <th style="width: 60px">浏览量</th>
+                        <th style="width: 150px">标题</th>
                         <th>摘要</th>
                         <th style="width: 210px">操作</th>
+                        <th style="width: 60px">删除</th>
                     </tr>
+                    {if condition="count($list) elt 0"}
+                        <tr style="height: 70px;padding: 10px;">
+                            <td colspan="8">
+                                <strong>暂无数据信息</strong>
+                            </td>
+                        </tr>
+                    {else /}
                     {volist name='list' id='news'}
-                    <tr>
+                    <tr style="height: 70px">
                         <td>{$news.id}</td>
                         <td>{$news.author}</td>
                         <td>{$news.publish_time}</td>
@@ -42,6 +51,7 @@
                             {/if}
                         </td>
                         <td>{$news.views}</td>
+                        <td>{$news.title}</td>
                         <td style="text-align: left;">{$news.abstract}</td>
                         <td>
                             <a class="btn btn-app nmodify" href="newsForm/{$news.id}">
@@ -57,15 +67,21 @@
                             </a>
                             {/if}
                         </td>
+                        <td>
+                            <a class="btn btn-app" data-toggle="modal" data-target="#mymodal" data-nid="{$news.id}" data-whatever="3">
+                                <i class="fa fa-bitbucket"></i> 删除
+                            </a>
+                        </td>
                     </tr>
                     {/volist}
+                    {/if}
                     </tbody>
                 </table>
             </div>
             <div class="box-footer clearfix">
                 <div class="col-sm-5">
                     <div class="dataTables_info" id="user_table_info" role="status" aria-live="polite">
-                    	共 {$count} 条记录
+                        共 {$count} 条记录
                     </div>
                 </div>
                 {$list->render()}
@@ -80,7 +96,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">×</span>
+                    <span aria-hidden="true">×</span>
                 </button>
                 <h4 class="modal-title">提示</h4>
             </div>
@@ -92,45 +108,64 @@
                 <button type="button" class="btn btn-primary">确定</button>
             </div>
         </div>
-    <!-- /.modal-content -->
+        <!-- /.modal-content -->
     </div>
     <!-- /.modal-dialog -->
 </div>
 
 <script>
-	var modal = $("#mymodal");
-	
-	modal.on("show.bs.modal", function(e) {    
-	    var draft = "确定要取消发布，转为草稿吗？";
-		var publish = "确定要发布新闻吗？";
-	    
-	    var button = $(e.relatedTarget); // Button that triggered the modal
-		var recipient = button.data('whatever'); // 0 是 已经发布  1 是 草稿(反)
-		var newsId = button.data('nid');
-		
-		var modal = $(this);
-		if(recipient == "0"){
-			modal.find('.modal-body p').text(draft);
-		}else if(recipient == "1"){
-			modal.find('.modal-body p').text(publish);
-		}
-		modal.find('.modal-footer .btn-primary').attr("onclick","changeState("+ newsId +","+ recipient +")");		
-	 })
-	function changeState(nid, state){
-		$.ajax({
-			url: "/admin/News/changeState",
+    var modal = $("#mymodal");
+
+    modal.on("show.bs.modal", function(e) {
+        var draft = "确定要取消发布，转为草稿吗？";
+        var publish = "确定要发布新闻吗？";
+        var del = "确定要删除该条信息吗？";
+
+        var button = $(e.relatedTarget); // Button that triggered the modal
+        var recipient = button.data('whatever'); // 0 是 已经发布  1 是 草稿(反)
+        var newsId = button.data('nid');
+
+        var modal = $(this);
+
+        if (recipient != "3"){
+            if(recipient == "0"){
+                modal.find('.modal-body p').text(draft);
+            }if(recipient == "1"){
+                modal.find('.modal-body p').text(publish);
+            }
+            modal.find('.modal-footer .btn-primary').attr("onclick","changeState("+ newsId +","+ recipient +")");
+        }else {
+            modal.find('.modal-body p').text(del);
+            modal.find('.modal-footer .btn-primary').attr("onclick","delNews("+ newsId +")");
+        }
+    })
+    function changeState(nid, state){
+        $.ajax({
+            url: "/admin/News/changeState",
             data: {nid:nid,state:state},
             type: "POST",
             dataType: 'json',
             success: function(data) {
-            	if(data.result != 0){
-            		window.location.href = window.location.href;
-                	$('#modal-default').modal('close');
-            	}
+                if(data.result != 0){
+                    window.location.href = window.location.href;
+                    $('#modal-default').modal('close');
+                }
             }
-		});
-	}
-	
-	
+        });
+    }
+    function delNews(nid) {
+        $.ajax({
+            url: "/admin/News/delNews",
+            data: {nid:nid},
+            type: "POST",
+            dataType: 'json',
+            success: function(data) {
+                if(data.result != 0){
+                    window.location.href = window.location.href;
+                    $('#modal-default').modal('close');
+                }
+            }
+        });
+    }
 </script>
 {/block}

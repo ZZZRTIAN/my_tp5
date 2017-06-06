@@ -12,12 +12,12 @@
                 <h3 class="box-title" style="height: 30px">Select2</h3>
                 <div class="box-tools pull-right">
                     <div class="btn-group">
-                      <button type="button" class="btn btn-primary" onclick="toAjax(1);">
-                        <i class="fa fa-cloud-upload"></i> 发布
-                      </button>
-                      <button type="button" class="btn btn-warning" onclick="toAjax(0);">
-                        <i class="fa fa-bitbucket"></i> 草稿
-                      </button>
+                        <button type="button" class="btn btn-primary" onclick="toAjax(1);">
+                            <i class="fa fa-cloud-upload"></i> 发布
+                        </button>
+                        <button type="button" class="btn btn-warning" onclick="toAjax(0);">
+                            <i class="fa fa-bitbucket"></i> 草稿
+                        </button>
                     </div>
                 </div>
             </div>
@@ -61,15 +61,15 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="col-xs-4">
                         <div id="_pic"  data-toggle="modal" data-target="#avatar-modal" style="border:1px dashed #d9d9d9;border-radius:5px;margin: 50px 50px;height: 205px;width: 305px">
-                          <img src="" style="padding: 3px;">
+                            <img src="" style="padding: 3px;">
                         </div>
                     </div>
                 </div>
-                
-                
+
+
                 <div class="row">
                     <div class="col-xs-12">
                         <textarea id="tinymceArea"></textarea>
@@ -176,148 +176,156 @@
 <script src="/assets/js/html2canvas.min.js" type="text/javascript" charset="utf-8"></script>
 
 <script>
-
-var ERROR_TIPS = "<label class='control-label pull-right' for='inputError'> \
+    var newsId;
+    var ERROR_TIPS = "<label class='control-label pull-right' for='inputError'> \
                     <i class='fa fa-times-circle-o'></i> Input with error \
                 </label>";
-var SUCCESS_TIPS = "<label class='control-label pull-right' for='inputSuccess'> \
+    var SUCCESS_TIPS = "<label class='control-label pull-right' for='inputSuccess'> \
                         <i class='fa fa-check'></i> Input with success \
                     </label>";
 
-// 加载数据 如果有传来 id
-$(document).ready(function () {
-    var newsId = "{$newsId}";
-    if (newsId != ""){
-        $.get("/admin/News/editNews/" + newsId, function (data, status) {
-            if (status == 'success') {
-        		$('.box-tools > div.btn-group').empty();
-                $('#title').val(data.title);
-                $('#datepicker').val(data.date);
-                $('#_pic img').attr('src',"/"+data.b_img );
-                $('#news_ab textarea').val(data.abstract);
-                setTimeout(function () {
-                    tinymce.get('tinymceArea').setContent(data.content);
-                    $('.overlay').hide();
-                },200);
-            }
-        });
-    }else{
-        $('.overlay').hide();
-    }
-});
-
-$(".avatar-save").on("click", function() {
-    var img_lg = document.getElementById('imageHead');
-      // 截图小的显示框内的内容
-    html2canvas(img_lg, {
-        allowTaint: true,
-        taintTest: false,
-        onrendered: function(canvas) {
-            canvas.id = "mycanvas";
-            //生成base64图片数据
-            var dataUrl = canvas.toDataURL("image/jpeg");
-            var newImg = document.createElement("img");
-            newImg.src = dataUrl;
-            $('#_pic img').attr('src',dataUrl );
+    // 加载数据 如果有传来 id
+    $(document).ready(function () {
+        newsId = "{$newsId}";
+        if (newsId != ""){
+            $.get("/admin/News/editNews/" + newsId, function (data, status) {
+                if (status == 'success') {
+                    $('.box-tools > div.btn-group').empty();
+                    $('.box-tools > div.btn-group').append("<button type='button' class='btn btn-warning' onclick='toAjax(" + data.state + ");'><i class='fa fa-save'></i>保存</button>");
+                    $('#title').val(data.title);
+                    $('#datepicker').val(data.date);
+                    $('#_pic img').attr('src',"/"+data.b_img );
+                    $('#news_ab textarea').val(data.abstract);
+                    setTimeout(function () {
+                        tinymce.get('tinymceArea').setContent(data.content);
+                        $('.overlay').hide();
+                    },200);
+                }
+            });
+        }else{
+            $('.overlay').hide();
         }
     });
-});
 
-$('#datepicker').datepicker({
-    minDate: new Date(),
-    autoclose:true, // 选完后自动关闭
-    format: 'yyyy-mm-dd'
-});
-
-/* tinymce快捷工具 */
-var plugins = 'advlist,autolink,code,paste,textcolor, colorpicker,fullscreen,link,lists,media,wordcount,imagetools,uploadimage';
-
-tinymce.init({
-    selector: '#tinymceArea',
-    language: 'zh_CN',
-    upload_image_url: '/admin/News/uploadImg',
-    object_resizing: false, // 关闭调整图像，表格，media对象的大小
-    height: 400,
-    toolbar1: "undo redo | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | fontsizeselect ",
-    toolbar2: "forecolor backcolor | bullist numlist | outdent indent | removeformat | link unlink uploadimage  | code preview fullscreen ",
-    menubar:'',// 菜单栏
-    plugins: this.plugins
-});
-
-function toAjax(f) {
-    var data = validate();
-    data.state = f;
-    //验证失败
-    if (!data) {
-        alert('请填写完整信息');
-    }else {
-        $.ajax({
-            url: "/admin/News/addNews",
-            data: data,
-            type: "POST",
-            dataType: 'json',
-            success: function(re) {
-                if (re.result == 1){
-                    $('#modal-default').modal('show');
-                }else{
-                    alert('有错误');
-                }
+    $(".avatar-save").on("click", function() {
+        var img_lg = document.getElementById('imageHead');
+        // 截图小的显示框内的内容
+        html2canvas(img_lg, {
+            allowTaint: true,
+            taintTest: false,
+            onrendered: function(canvas) {
+                canvas.id = "mycanvas";
+                //生成base64图片数据
+                var dataUrl = canvas.toDataURL("image/jpeg");
+                var newImg = document.createElement("img");
+                newImg.src = dataUrl;
+                $('#_pic img').attr('src',dataUrl );
             }
         });
-    }
-}
+    });
 
-function validate(){
-    var ispassed = true;
-    // 标题
-    var title = $('#title').val();
-    if (!title) {
-        $('.title').addClass("has-error").siblings().removeClass("has-error");
-        $('.title').prepend(ERROR_TIPS);
-        ispassed = false;
-    }else{
-        $('.title').prepend(SUCCESS_TIPS);
-        $('.title').addClass('has-success').siblings().removeClass("has-success");
-    }
-    // 作者
-    var author = $('.sauthor').val();
-    if (!author) {
-        $('.author').addClass("has-error").siblings().removeClass("has-error");
-        $('.author').prepend(ERROR_TIPS);
-        ispassed = false;
-    }else{
-        $('.author').prepend(SUCCESS_TIPS);
-        $('.author').addClass('has-success').siblings().removeClass("has-success");
-    }
-    // 发布时间
-    var publish_time = $('#datepicker').val();
-    if (!publish_time) {
-        $('.datebox').addClass("has-error").siblings().removeClass("has-error");
-        $('.datebox').prepend(ERROR_TIPS);
-        ispassed = false;
-    }else{
-        $('.datebox').prepend(SUCCESS_TIPS);
-        $('.datebox').addClass('has-success').siblings().removeClass("has-success");
-    }
-    // 摘要
-    var abstract = $('#news_ab textarea').val();
-    if (!abstract) {
-        $('#news_ab').addClass("has-error").siblings().removeClass("has-error");
-        $('#news_ab').prepend(ERROR_TIPS);
-        ispassed = false;
-    }else{
-        $('#news_ab').prepend(SUCCESS_TIPS);
-        $('#news_ab').addClass('has-success').siblings().removeClass("has-success");
-    }
-    // 图片src data
-    var b_img = $('#_pic img').attr("src");
-    // 获取tinymce文本内容   设置内容setContent
-    var content = tinymce.get('tinymceArea').getContent({ format: 'raw' });
+    $('#datepicker').datepicker({
+        minDate: new Date(),
+        autoclose:true, // 选完后自动关闭
+        format: 'yyyy-mm-dd'
+    });
 
-    if(ispassed){
-        return {title,author,publish_time,abstract,b_img,content}
+    /* tinymce快捷工具 */
+    var plugins = 'advlist,autolink,code,paste,textcolor, colorpicker,fullscreen,link,lists,media,wordcount,imagetools,uploadimage';
+
+    tinymce.init({
+        selector: '#tinymceArea',
+        language: 'zh_CN',
+        upload_image_url: '/admin/News/uploadImg',
+        object_resizing: false, // 关闭调整图像，表格，media对象的大小
+        height: 400,
+        toolbar1: "undo redo | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | fontsizeselect ",
+        toolbar2: "forecolor backcolor | bullist numlist | outdent indent | removeformat | link unlink uploadimage  | code preview fullscreen ",
+        menubar:'',// 菜单栏
+        plugins: this.plugins
+    });
+
+    function toAjax(f) {
+        var data = validate();
+        var url;
+        if ( newsId　!= undefined && newsId != ""){
+            data.id = newsId;
+            url = "/admin/News/modifyNews";
+        }else{
+            url = "/admin/News/addNews";
+        }
+        data.state = f;
+        //验证失败
+        if (!data) {
+            alert('请填写完整信息');
+        }else {
+            $.ajax({
+                url: url,
+                data: data,
+                type: "POST",
+                dataType: 'json',
+                success: function(re) {
+                    if (re.result == 1){
+                        $('#modal-default').modal('show');
+                    }else{
+                        alert('有错误');
+                    }
+                }
+            });
+        }
     }
-    return '';
-}
+
+    function validate(){
+        var ispassed = true;
+        // 标题
+        var title = $('#title').val();
+        if (!title) {
+            $('.title').addClass("has-error").siblings().removeClass("has-error");
+            $('.title').prepend(ERROR_TIPS);
+            ispassed = false;
+        }else{
+            $('.title').prepend(SUCCESS_TIPS);
+            $('.title').addClass('has-success').siblings().removeClass("has-success");
+        }
+        // 作者
+        var author = $('.sauthor').val();
+        if (!author) {
+            $('.author').addClass("has-error").siblings().removeClass("has-error");
+            $('.author').prepend(ERROR_TIPS);
+            ispassed = false;
+        }else{
+            $('.author').prepend(SUCCESS_TIPS);
+            $('.author').addClass('has-success').siblings().removeClass("has-success");
+        }
+        // 发布时间
+        var publish_time = $('#datepicker').val();
+        if (!publish_time) {
+            $('.datebox').addClass("has-error").siblings().removeClass("has-error");
+            $('.datebox').prepend(ERROR_TIPS);
+            ispassed = false;
+        }else{
+            $('.datebox').prepend(SUCCESS_TIPS);
+            $('.datebox').addClass('has-success').siblings().removeClass("has-success");
+        }
+        // 摘要
+        var abstract = $('#news_ab textarea').val();
+        if (!abstract) {
+            $('#news_ab').addClass("has-error").siblings().removeClass("has-error");
+            $('#news_ab').prepend(ERROR_TIPS);
+            ispassed = false;
+        }else{
+            $('#news_ab').prepend(SUCCESS_TIPS);
+            $('#news_ab').addClass('has-success').siblings().removeClass("has-success");
+        }
+        // 图片src data
+        var b_img = $('#_pic img').attr("src");
+        // 获取tinymce文本内容   设置内容setContent
+        var content = tinymce.get('tinymceArea').getContent({ format: 'raw' });
+
+        if(ispassed){
+            return {title,author,publish_time,abstract,b_img,content}
+        }
+        return '';
+    }
 </script>
 {/block}
